@@ -52,7 +52,6 @@ class CapMonsterChecker:
                             errorCode = checkResp.json().get('errorCode')
                             if errorCode is not None:
                                 print(f"{fail}Invalid Key : {key} | Proxy : {proxy}")
-                                CapMonsterChecker.send_webhook(key, balance, proxy)
                             else:
                                 print(f"{fail}Error Checking Key : {key} | {checkResp.json()} | Proxy : {proxy}")
                 else:
